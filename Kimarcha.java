@@ -8,10 +8,10 @@ public class Kimarcha{
     static String[] pastries = {"Honey Cookies", "Bungeoppang", "Madeleines", "Tiramisu", "Hotteok"};
     static double[] pastryPrices = {49.0, 34.0, 39.0, 69.0, 39.0};
 
-    static String[] orderItems = new String[50];
-    static int[] orderQuantities = new int[50];
-    static double[] orderPrices = new double[50];
-    static double[] orderUnitPrices = new double[50];
+    static String[] orderItems = new String[1000000];
+    static int[] orderQuantities = new int[1000000];
+    static double[] orderPrices = new double[1000000];
+    static double[] orderUnitPrices = new double[1000000];
     static int orderCount = 0;
 
     public static void main(String[] args) {
