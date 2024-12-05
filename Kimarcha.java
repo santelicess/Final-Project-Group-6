@@ -1,4 +1,4 @@
-package kimarchaFinalRev;
+package KimarchaPackage;
 import java.util.Scanner;
 
 public class Kimarcha{
@@ -19,37 +19,38 @@ public class Kimarcha{
         boolean running = true;
 
         System.out.println("Welcome to Kimarcha!");
-       
 
         while (running) {
-           
             displayMainMenu();
-            String choice = scanner.next();
+            String choice = scanner.nextLine(); 
+
             
-            if (choice.equals("1")) {
-		    orderDrinks(scanner);
-			} else if (choice.equals("2")) {
-			    orderPastries(scanner);
-			} else if (choice.equals("3")) {
-			    cancelOrder(scanner);
-			} else if (choice.equals("4")) {
-			    running = checkout(scanner);
-			} else if (choice.equals("5")) {
-			    clearOrders();
-			    System.out.println("Thank you for visiting Kimarcha!");
-			    System.out.println("\nSuccesfully returned to the main menu.");
-			    continue;
-			} else if (choice.equals("0")) {  
-			    System.out.println("Thank you for visiting Kimarcha!");
-			    running = false;
-			} else {
-			    System.out.println("Invalid option. Please try again.");
-			}
-	
-	    }
+            if (choice.matches("[0-5]")) {
+                if (choice.equals("1")) {
+                    orderDrinks(scanner);
+                } else if (choice.equals("2")) {
+                    orderPastries(scanner);
+                } else if (choice.equals("3")) {
+                    cancelOrder(scanner);
+                } else if (choice.equals("4")) {
+                    running = checkout(scanner);
+                } else if (choice.equals("5")) {
+                    clearOrders();
+                    System.out.println("Thank you for visiting Kimarcha!");
+                    System.out.println("\nSuccessfully returned to the main menu.");
+                } else if (choice.equals("0")) {
+                    System.out.println("Thank you for visiting Kimarcha!");
+                    running = false;
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a single digit between 0 and 5 without spaces.");
+            }
+        }
+
         scanner.close();
     }
-       
+
+
     
    public static void displayMainMenu() {
 	   System.out.println("\nYour Cart:");
@@ -72,108 +73,100 @@ public class Kimarcha{
 
    
    public static void orderDrinks(Scanner scanner) {
-	   while (true) {
-		   System.out.println("\nAvailable Drinks:");
-		   System.out.println("PRODUCT                REGULAR 12OZ      MEDIUM 16OZ        LARGE 22OZ");
-        
-		   for (int i = 0; i < drinks.length; i++) {
-			   double mediumPrice = drinkPrices[i] + 10;
-			   double largePrice = drinkPrices[i] + 20;
-			   System.out.println("D" + (i + 1) + " " + drinks[i] + " ".repeat(25 - ("D" + (i + 1) + " " + drinks[i]).length()) 
-                + drinkPrices[i] + " ".repeat(18 - String.valueOf(drinkPrices[i]).length()) 
-                + mediumPrice + " ".repeat(18 - String.valueOf(mediumPrice).length()) 
-                + largePrice);
-		   }
-        
-        System.out.println("0 - Back to Main Menu");
+	    while (true) {
+	        System.out.println("\nAvailable Drinks:");
+	        System.out.println("PRODUCT                REGULAR 12OZ      MEDIUM 16OZ        LARGE 22OZ");
 
-        System.out.print("\nEnter drink codes (e.g., D1,D2,D3 or d1,d2,d3): ");
-        String input = scanner.next().toUpperCase();
-        
-        if (input.equals("0")) {
-            System.out.println("Succesfully returned to the main menu.");
-            return; 
-        }
+	        for (int i = 0; i < drinks.length; i++) {
+	            double mediumPrice = drinkPrices[i] + 10;
+	            double largePrice = drinkPrices[i] + 20;
+	            System.out.println("D" + (i + 1) + " " + drinks[i] + " ".repeat(25 - ("D" + (i + 1) + " " + drinks[i]).length()) 
+	                + drinkPrices[i] + " ".repeat(18 - String.valueOf(drinkPrices[i]).length()) 
+	                + mediumPrice + " ".repeat(18 - String.valueOf(mediumPrice).length()) 
+	                + largePrice);
+	        }
 
-        String[] drinkChoices = input.split(",");
-        boolean hasValidInput = false;
+	        System.out.println("0 - Back to Main Menu");
 
-        for (String drinkChoice : drinkChoices) {
-            if (drinkChoice.startsWith("D") && drinkChoice.length() == 2) {
-                int itemPosition = Character.getNumericValue(drinkChoice.charAt(1)) - 1;
-                if (itemPosition >= 0 && itemPosition < drinks.length) {
-                    hasValidInput = true;
-                    System.out.println("\nChoose size for " + drinks[itemPosition] + ":");
-                    System.out.println("1. Small (12oz) - Base Price");
-                    System.out.println("2. Medium (16oz) - PHP 10 extra");
-                    System.out.println("3. Large (22oz) - PHP 20 extra");
+	        System.out.print("\nEnter drink code (e.g., D1, D2): ");
+	        String input = scanner.nextLine().toUpperCase().replaceAll("\\s", "");  
 
-                    int sizeChoice = 0;
-                    boolean validSize = false;
+	        if (input.equals("0")) {
+	            System.out.println("Successfully returned to the main menu.");
+	            return; 
+	        }
 
-                    while (!validSize) {
-                        System.out.print("Select size: ");
-                        if (scanner.hasNextInt()) {
-                            sizeChoice = scanner.nextInt();
-                            if (sizeChoice == 1 || sizeChoice == 2 || sizeChoice == 3) {
-                                validSize = true;
-                            } else {
-                                System.out.println("Invalid size choice. Please select 1, 2, or 3.");
-                            }
-                        } else {
-                            System.out.println("Invalid input. Please enter a number (1, 2, or 3).");
-                            scanner.next();
-                        }
-                    }
+	        
+	        String[] codes = input.split("[,\\s]+");
 
-                    double sizePrice = 0;
-                    if (sizeChoice == 2) {
-                        sizePrice = 10;
-                    } else if (sizeChoice == 3) {
-                        sizePrice = 20;
-                    }
+	        
+	        if (codes.length == 1 && codes[0].startsWith("D") && codes[0].length() == 2) {
+	            int itemPosition = Character.getNumericValue(codes[0].charAt(1)) - 1;
+	            if (itemPosition >= 0 && itemPosition < drinks.length) {
+	                System.out.println("\nChoose size for " + drinks[itemPosition] + ":");
+	                System.out.println("1. Small (12oz) - Base Price");
+	                System.out.println("2. Medium (16oz) - PHP 10 extra");
+	                System.out.println("3. Large (22oz) - PHP 20 extra");
 
-                    String sizeName;
-                    if (sizeChoice == 2) {
-                        sizeName = "Medium";
-                    } else if (sizeChoice == 3) {
-                        sizeName = "Large";
-                    } else {
-                        sizeName = "Small";
-                    }
+	                int sizeChoice = 0;
+	                boolean validSize = false;
 
-                    int quantity = 0;
-                    boolean validQuantity = false;
+	                while (!validSize) {
+	                    System.out.print("Select size: ");
+	                    if (scanner.hasNextInt()) {
+	                        sizeChoice = scanner.nextInt();
+	                        if (sizeChoice == 1 || sizeChoice == 2 || sizeChoice == 3) {
+	                            validSize = true;
+	                        } else {
+	                            System.out.println("Invalid size choice. Please select 1, 2, or 3.");
+	                        }
+	                    } else {
+	                        System.out.println("Invalid input. Please enter a number (1, 2, or 3).");
+	                        scanner.next();
+	                    }
+	                }
 
-                    while (!validQuantity) {
-                        System.out.print("Enter quantity: ");
-                        if (scanner.hasNextInt()) {
-                            quantity = scanner.nextInt();
-                            if (quantity > 0) {
-                                validQuantity = true;
-                            } else {
-                                System.out.println("Invalid quantity. Please enter a number greater than 0.");
-                            }
-                        } else {
-                            System.out.println("Invalid input. Please enter a valid quantity.");
-                            scanner.next();
-                        }
-                    }
+	                double sizePrice = 0;
+	                if (sizeChoice == 2) {
+	                    sizePrice = 10;
+	                } else if (sizeChoice == 3) {
+	                    sizePrice = 20;
+	                }
 
-                    addToOrder(drinks[itemPosition] + " (" + sizeName + ")", quantity, drinkPrices[itemPosition] + sizePrice);
-                } else {
-                    System.out.println("Invalid drink code: " + drinkChoice);
-                }
-            } else {
-                System.out.println("Invalid drink code: " + drinkChoice);
-            }
-        }
+	                String sizeName;
+	                if (sizeChoice == 2) {
+	                    sizeName = "Medium";
+	                } else if (sizeChoice == 3) {
+	                    sizeName = "Large";
+	                } else {
+	                    sizeName = "Small";
+	                }
 
-        if (hasValidInput) {
-        	break;
-        }else {
-        	System.out.println("No valid drinks selected. Please try again.");
-        }
+	                int quantity = 0;
+	                boolean validQuantity = false;
+
+	                while (!validQuantity) {
+	                    System.out.print("Enter quantity: ");
+	                    if (scanner.hasNextInt()) {
+	                        quantity = scanner.nextInt();
+	                        if (quantity > 0) {
+	                            validQuantity = true;
+	                        } else {
+	                            System.out.println("Invalid quantity. Please enter a number greater than 0.");
+	                        }
+	                    } else {
+	                        System.out.println("Invalid input. Please enter a valid quantity.");
+	                        scanner.next();
+	                    }
+	                }
+
+	                addToOrder(drinks[itemPosition] + " (" + sizeName + ")", quantity, drinkPrices[itemPosition] + sizePrice);
+	            } else {
+	                System.out.println("Invalid drink code: " + codes[0]);
+	            }
+	        } else {
+	            System.out.println("Please enter only one drink code (no commas or multiple codes).");
+	        }
 	    }
 	}
 
@@ -191,64 +184,54 @@ public class Kimarcha{
 
    
    public static void orderPastries(Scanner scanner) {
-	   while (true) {
-		   System.out.println("\nAvailable Pastries:");
-		   System.out.println(String.format("%-20s%-20s", "PRODUCT", "PRICE"));
-		   for (int i = 0; i < pastries.length; i++) {
-			   System.out.println(String.format("%-20s%-20.2f", "P" + (i + 1) + " " + pastries[i], pastryPrices[i]));
-		   }
-		   System.out.println("0 - Back to Main Menu");
+	    while (true) {
+	        System.out.println("\nAvailable Pastries:");
+	        System.out.println(String.format("%-20s %-20s", "PRODUCT", "PRICE"));
+	        for (int i = 0; i < pastries.length; i++) {
+	            System.out.println(String.format("%-20s%-20.2f", "P" + (i + 1) + " " + pastries[i], pastryPrices[i]));
+	        }
+	        System.out.println("0 - Back to Main Menu");
 
-		   System.out.print("\nEnter pastry codes (e.g., P1,P3,P5 or p1,p3,p5): ");
-		   String input = scanner.next().toUpperCase();
-        
-		   if (input.equals("0")) {
-			   System.out.println("Succesfully returned to the main menu.");
-			   return;
-		   }
+	        System.out.print("\nEnter a pastry code (e.g., P1, P2) or '0' to go back: ");
+	        String input = scanner.nextLine().toUpperCase();  
+	        if (input.equals("0")) {
+	            System.out.println("Successfully returned to the main menu.");
+	            return;
+	        }
 
-        String[] pastryChoices = input.split(",");
-        boolean hasValidInput = false;
+	       
+	        if (input.matches("P[1-9][0-9]*")) {  
+	            int itemPosition = Integer.parseInt(input.substring(1)) - 1;
 
-        for (String pastryChoice : pastryChoices) {
-            if (pastryChoice.startsWith("P") && pastryChoice.length() == 2) {
-                int itemPosition = Character.getNumericValue(pastryChoice.charAt(1)) - 1;
-                if (itemPosition >= 0 && itemPosition < pastries.length) {
-                    hasValidInput = true;
-                    System.out.println("\nYou selected: " + pastries[itemPosition]);
-                    System.out.print("Enter quantity for " + pastries[itemPosition] + ": ");
-                    int quantity = 0;
+	            if (itemPosition >= 0 && itemPosition < pastries.length) {
+	                System.out.println("\nYou selected: " + pastries[itemPosition]);
+	                System.out.print("Enter quantity for " + pastries[itemPosition] + ": ");
+	                
+	                int quantity = 0;
+	                while (true) {
+	                    if (scanner.hasNextInt()) {
+	                        quantity = scanner.nextInt();
+	                        if (quantity <= 0) {
+	                            System.out.print("Quantity must be greater than 0. Please enter again: ");
+	                        } else {
+	                            break;
+	                        }
+	                    } else {
+	                        System.out.print("Invalid input. Please enter a valid number: ");
+	                        scanner.next(); 
+	                    }
+	                }
 
-                    while (true) {
-                        if (scanner.hasNextInt()) {
-                            quantity = scanner.nextInt();
-                           if (quantity <= 0) {
-                                System.out.print("Quantity must be greater than 0. Please enter again: ");
-                            } else {
-                                break;
-                            }
-                        } else {
-                            System.out.print("Invalid input. Please enter a valid number: ");
-                            scanner.next();                         
-                        }
-                    }
-
-                    addToOrder(pastries[itemPosition], quantity, pastryPrices[itemPosition]);
-                } else {
-                    System.out.println("Invalid pastry code: " + pastryChoice + ". Please enter a valid code (P1 to P5).");
-                }
-            } else {
-                System.out.println("Invalid pastry code: " + pastryChoice + ". Please enter a valid code (P1 to P5).");
-            }
-        }
-
-        if (!hasValidInput) {
-            System.out.println("No valid pastries selected. Please try again.");
-        } else {
-            break; 
-        }
-	   }
-   }
+	                addToOrder(pastries[itemPosition], quantity, pastryPrices[itemPosition]);
+	                scanner.nextLine();  
+	            } else {
+	                System.out.println("Invalid pastry code: " + input + ". Please enter a valid code (P1 to P5).");
+	            }
+	        } else {
+	            System.out.println("Invalid input. Please enter a valid pastry code (e.g., P1, P2).");
+	        }
+	    }
+	}
 
 
    public static void addToOrder(String itemName, int quantity, double pricePerUnit) {
@@ -378,13 +361,13 @@ public class Kimarcha{
 	    }
 	}
 
-	public static boolean finalizeCheckout(Scanner scanner) {
+   public static boolean finalizeCheckout(Scanner scanner) {
 	    double subtotal = 0;
-	    
 	    for (int i = 0; i < orderCount; i++) {
 	        subtotal += orderPrices[i];
 	    }
 
+	  
 	    String isPWD;
 	    while (true) {
 	        System.out.print("\nAre you a PWD? (yes/no): ");
@@ -412,16 +395,9 @@ public class Kimarcha{
 	        discount = subtotal * 0.20;
 	    }
 
-	    String discountType;
-	    if (isPWD.equalsIgnoreCase("yes") && isSenior.equalsIgnoreCase("yes")) {
-	        discountType = "PWD & Senior";
-	    } else if (isPWD.equalsIgnoreCase("yes")) {
-	        discountType = "PWD";
-	    } else if (isSenior.equalsIgnoreCase("yes")) {
-	        discountType = "Senior";
-	    } else {
-	        discountType = "None";
-	    }
+	    String discountType = (isPWD.equalsIgnoreCase("yes") && isSenior.equalsIgnoreCase("yes"))
+	        ? "PWD & Senior"
+	        : (isPWD.equalsIgnoreCase("yes") ? "PWD" : (isSenior.equalsIgnoreCase("yes") ? "Senior" : "None"));
 
 	    discount = Math.round(discount); 
 	    double finalAmount = Math.round(subtotal - discount);
@@ -432,15 +408,15 @@ public class Kimarcha{
 	    System.out.println("\nDiscount (20%): PHP " + (int) discount + ".00 (" + discountType + ")");
 	    System.out.println("DISCOUNTED AMOUNT (after discount): PHP " + (int) finalAmount + ".00");
 	    System.out.println("VAT (20%): PHP " + (int) vat + ".00");
-	    System.out.println("\nTOTAL AMOUNT(incl. VAT): PHP " + (int) total + ".00");
+	    System.out.println("\nTOTAL AMOUNT (incl. VAT): PHP " + (int) total + ".00");
 
 	    int payment = 0;
 	    while (true) {
 	        System.out.print("\nEnter CASH amount: ");
-	        if (scanner.hasNextInt()) {
-	            payment = scanner.nextInt();
+	        if (scanner.hasNextDouble()) {
+	            payment = (int) scanner.nextDouble();
 	            if (payment >= total) {
-	                double change = payment - total;  // No need for rounding as it's an integer now
+	                double change = payment - total;
 	                System.out.println("\nCHANGE: PHP " + change + ".00\n");
 	                printFinalReceipt(subtotal, discount, discountType, finalAmount, vat, total, payment);
 	                System.exit(0); 
@@ -448,14 +424,11 @@ public class Kimarcha{
 	                System.out.println("Insufficient cash. Please make sure you enter enough to cover the total.");
 	            }
 	        } else {
-	            System.out.println("Invalid input. ");
+	            System.out.println("Invalid Input. PLEASE INPUT CASH.");
 	            scanner.next(); 
 	        }
 	    }
 	}
-
-
-
    public static void printFinalReceipt(double subtotal, double discount, String discountType, double finalAmount, double vat, double total, double payment) {
     
 	   System.out.println("======================== CAFE RECEIPT ========================");
