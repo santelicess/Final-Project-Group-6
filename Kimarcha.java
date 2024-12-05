@@ -25,7 +25,7 @@ public class Kimarcha{
            
             displayMainMenu();
             String choice = scanner.next();
-
+            
             if (choice.equals("1")) {
 		    orderDrinks(scanner);
 			} else if (choice.equals("2")) {
@@ -100,10 +100,10 @@ public class Kimarcha{
 
         for (String drinkChoice : drinkChoices) {
             if (drinkChoice.startsWith("D") && drinkChoice.length() == 2) {
-                int index = Character.getNumericValue(drinkChoice.charAt(1)) - 1;
-                if (index >= 0 && index < drinks.length) {
+                int itemPosition = Character.getNumericValue(drinkChoice.charAt(1)) - 1;
+                if (itemPosition >= 0 && itemPosition < drinks.length) {
                     hasValidInput = true;
-                    System.out.println("\nChoose size for " + drinks[index] + ":");
+                    System.out.println("\nChoose size for " + drinks[itemPosition] + ":");
                     System.out.println("1. Small (12oz) - Base Price");
                     System.out.println("2. Medium (16oz) - PHP 10 extra");
                     System.out.println("3. Large (22oz) - PHP 20 extra");
@@ -160,7 +160,7 @@ public class Kimarcha{
                         }
                     }
 
-                    addToOrder(drinks[index] + " (" + sizeName + ")", quantity, drinkPrices[index] + sizePrice);
+                    addToOrder(drinks[itemPosition] + " (" + sizeName + ")", quantity, drinkPrices[itemPosition] + sizePrice);
                 } else {
                     System.out.println("Invalid drink code: " + drinkChoice);
                 }
@@ -212,11 +212,11 @@ public class Kimarcha{
 
         for (String pastryChoice : pastryChoices) {
             if (pastryChoice.startsWith("P") && pastryChoice.length() == 2) {
-                int index = Character.getNumericValue(pastryChoice.charAt(1)) - 1;
-                if (index >= 0 && index < pastries.length) {
+                int itemPosition = Character.getNumericValue(pastryChoice.charAt(1)) - 1;
+                if (itemPosition >= 0 && itemPosition < pastries.length) {
                     hasValidInput = true;
-                    System.out.println("\nYou selected: " + pastries[index]);
-                    System.out.print("Enter quantity for " + pastries[index] + ": ");
+                    System.out.println("\nYou selected: " + pastries[itemPosition]);
+                    System.out.print("Enter quantity for " + pastries[itemPosition] + ": ");
                     int quantity = 0;
 
                     while (true) {
@@ -233,7 +233,7 @@ public class Kimarcha{
                         }
                     }
 
-                    addToOrder(pastries[index], quantity, pastryPrices[index]);
+                    addToOrder(pastries[itemPosition], quantity, pastryPrices[itemPosition]);
                 } else {
                     System.out.println("Invalid pastry code: " + pastryChoice + ". Please enter a valid code (P1 to P5).");
                 }
@@ -307,17 +307,17 @@ public class Kimarcha{
 		   return;
 	   }
 
-	   int index = cancelChoice - 1;
+	   int itemPosition = cancelChoice - 1;
 
-	   System.out.print("Enter quantity to cancel (currently ordered: " + orderQuantities[index] + "): ");
+	   System.out.print("Enter quantity to cancel (currently ordered: " + orderQuantities[itemPosition] + "): ");
 	   int quantityToCancel;
 	   while (true) {
 		   if (scanner.hasNextInt()) {
 			   quantityToCancel = scanner.nextInt();
-			   if (quantityToCancel > 0 && quantityToCancel <= orderQuantities[index]) {
+			   if (quantityToCancel > 0 && quantityToCancel <= orderQuantities[itemPosition]) {
 				   break;
 	            } else {
-	                System.out.print("Invalid quantity. Enter a number between 1 and " + orderQuantities[index] + ": ");
+	                System.out.print("Invalid quantity. Enter a number between 1 and " + orderQuantities[itemPosition] + ": ");
 	            }
 	        } else {
 	            System.out.print("Invalid input. Please enter a valid number: ");
@@ -325,13 +325,13 @@ public class Kimarcha{
 	        }
 	   }
 
-    orderQuantities[index] -= quantityToCancel;
-    orderPrices[index] -= quantityToCancel * orderUnitPrices[index];
+    orderQuantities[itemPosition] -= quantityToCancel;
+    orderPrices[itemPosition] -= quantityToCancel * orderUnitPrices[itemPosition];
 
-    System.out.println("Updated quantity of " + orderItems[index] + ": " + orderQuantities[index]);
+    System.out.println("Updated quantity of " + orderItems[itemPosition] + ": " + orderQuantities[itemPosition]);
 
-    if (orderQuantities[index] == 0) {
-        for (int i = index; i < orderCount - 1; i++) {
+    if (orderQuantities[itemPosition] == 0) {
+        for (int i = itemPosition; i < orderCount - 1; i++) {
             orderItems[i] = orderItems[i + 1];
             orderQuantities[i] = orderQuantities[i + 1];
             orderPrices[i] = orderPrices[i + 1];
@@ -369,10 +369,10 @@ public class Kimarcha{
 				   System.out.println("Succesfully returned to the main menu. Your orders are saved.");
 				   return true; 
 			   } else {
-				   System.out.println("Invalid choice. Please select 1 or 2.");
+				   System.out.println("Invalid choice. Please select 1 or 0.");
 			   }
 		   } else {
-			   System.out.println("Invalid input. Please enter 1 or 2.");
+			   System.out.println("Invalid input. Please enter 1 or 0.");
 			   scanner.next(); 
 		   }
 	   }
