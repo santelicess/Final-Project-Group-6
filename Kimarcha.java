@@ -344,42 +344,41 @@ public class Kimarcha{
 
    
    public static boolean checkout(Scanner scanner) {
-	   if (orderCount == 0) {
-		   System.out.println("No items to checkout.");
-		   return true; 
-	   }
+	    if (orderCount == 0) {
+	        System.out.println("No items to checkout.");
+	        return true; 
+	    }
 
-	   System.out.println("\nYour Current Order:");
-	   for (int i = 0; i < orderCount; i++) {
-		   System.out.println(String.format("%d. %s (x%d) - PHP %.2f", i + 1, orderItems[i], orderQuantities[i], orderPrices[i]));
-	   }
+	    System.out.println("\nYour Current Order:");
+	    for (int i = 0; i < orderCount; i++) {
+	        System.out.println(String.format("%d. %s (x%d) - PHP %.2f", i + 1, orderItems[i], orderQuantities[i], orderPrices[i]));
+	    }
 
-	   System.out.println("\nPROCEED TO CHECKOUT?");
-	   System.out.println("1. Proceed to Checkout");
-	   System.out.println("0 - Cancel and Back to Main Menu");
+	    System.out.println("\nPROCEED TO CHECKOUT?");
+	    System.out.println("1. Proceed to Checkout");
+	    System.out.println("0 - Cancel and Back to Main Menu");
 
-	   while (true) {
-		   System.out.print("Choose an option: ");
-		   if (scanner.hasNextInt()) {
-			   int choice = scanner.nextInt();
-			   if (choice == 1) {
-				   finalizeCheckout(scanner);
-				   return false; 
-			   } else if (choice == 0) {
-				   System.out.println("Succesfully returned to the main menu. Your orders are saved.");
-				   return true; 
-			   } else {
-				   System.out.println("Invalid choice. Please select 1 or 0.");
-			   }
-		   } else {
-			   System.out.println("Invalid input. Please enter 1 or 0.");
-			   scanner.next(); 
-		   }
-	   }
-   }
+	    while (true) {
+	        System.out.print("Choose an option: ");
+	        if (scanner.hasNextInt()) {
+	            int choice = scanner.nextInt();
+	            if (choice == 1) {
+	                finalizeCheckout(scanner);
+	                return false; 
+	            } else if (choice == 0) {
+	                System.out.println("Successfully returned to the main menu. Your orders are saved.");
+	                return true; 
+	            } else {
+	                System.out.println("Invalid choice. Please select 1 or 0.");
+	            }
+	        } else {
+	            System.out.println("Invalid input. Please enter 1 or 0.");
+	            scanner.next(); 
+	        }
+	    }
+	}
 
-
-   public static boolean finalizeCheckout(Scanner scanner) {
+	public static boolean finalizeCheckout(Scanner scanner) {
 	    double subtotal = 0;
 	    
 	    for (int i = 0; i < orderCount; i++) {
@@ -435,26 +434,26 @@ public class Kimarcha{
 	    System.out.println("VAT (20%): PHP " + (int) vat + ".00");
 	    System.out.println("\nTOTAL AMOUNT(incl. VAT): PHP " + (int) total + ".00");
 
-	    double payment = 0;
+	    int payment = 0;
 	    while (true) {
 	        System.out.print("\nEnter CASH amount: ");
-	        if (scanner.hasNextDouble()) {
-	            payment = scanner.nextDouble();
+	        if (scanner.hasNextInt()) {
+	            payment = scanner.nextInt();
 	            if (payment >= total) {
-	                double change = Math.round((payment - total) * 100.0) / 100.0;  
-	                System.out.println("\nCHANGE: PHP " + (int) change + ".00\n");
+	                double change = payment - total;  // No need for rounding as it's an integer now
+	                System.out.println("\nCHANGE: PHP " + change + ".00\n");
 	                printFinalReceipt(subtotal, discount, discountType, finalAmount, vat, total, payment);
-	                System.exit(0); // Terminate the program
+	                System.exit(0); 
 	            } else {
 	                System.out.println("Insufficient cash. Please make sure you enter enough to cover the total.");
 	            }
 	        } else {
-	            System.out.println("Invalid input. Please enter a valid payment amount.");
+	            System.out.println("Invalid input. ");
 	            scanner.next(); 
 	        }
-	        
 	    }
 	}
+
 
 
    public static void printFinalReceipt(double subtotal, double discount, String discountType, double finalAmount, double vat, double total, double payment) {
